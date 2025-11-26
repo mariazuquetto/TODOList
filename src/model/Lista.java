@@ -10,15 +10,17 @@ public abstract class Lista {
         setLista(new ArrayList<Item>());
     }
 
-    public void adicionarItem(ItemPadrao item) {
+    public void adicionarItem(Item item) {
         getLista().add(item);
     }
 
-    public void excluirItem(ItemPadrao item) {
+    public void excluirItem(Item item) {
         getLista().remove(item);
     }
 
-    public abstract void descrever();
+    public Item getItem(int id) { return lista.get(id+1); }
+
+    public abstract String descrever();
 
     public String getNome() {
         return nome;
@@ -28,11 +30,11 @@ public abstract class Lista {
         this.nome = nome;
     }
 
-    public ArrayList getLista() {
+    public ArrayList<Item> getLista() {
         return lista;
     }
 
-    public void setLista(ArrayList lista) {
+    public void setLista(ArrayList<Item> lista) {
         this.lista = lista;
     }
 }

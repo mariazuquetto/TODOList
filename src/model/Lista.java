@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public abstract class Lista {
     private String nome;
-    private ArrayList lista;
+    private ArrayList<Item> lista;
 
     public Lista(String nome) {
         setNome(nome);
@@ -18,7 +18,7 @@ public abstract class Lista {
         getLista().remove(item);
     }
 
-    public abstract void editarLista(String nome);
+    public abstract void descrever();
 
     public String getNome() {
         return nome;

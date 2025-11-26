@@ -3,6 +3,5 @@ import model.Programa;
 
 public interface IFabricaVisual {
 
-    ITela criarTela(Programa programa);
-
+    public IMenuView mostrarMenu(Programa programa);
 }

@@ -8,7 +8,7 @@ class ListaPadrao extends Lista {
     }
 
     @Override
-    public void editarLista(String nome) {
+    public void descrever() {
 
     }
 }

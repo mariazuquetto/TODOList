@@ -1,6 +1,6 @@
 package view;
 
-public interface IMenuView {
+public interface IListaView {
 
     public void mostrar();
 }

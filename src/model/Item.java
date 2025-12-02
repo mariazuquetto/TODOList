@@ -1,5 +1,7 @@
 package model;
 
+import static model.Utilidades.stringValida;
+
 public abstract class Item {
     private String titulo;
     private Estado estado;
@@ -13,8 +15,12 @@ public abstract class Item {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitulo(String titulo) throws IllegalArgumentException {
+        if (stringValida(titulo)) {
+            this.titulo = titulo;
+        } else {
+            throw new IllegalArgumentException("Título inválido.");
+        }
     }
 
     public Estado getEstado() {

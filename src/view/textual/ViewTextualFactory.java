@@ -1,13 +1,13 @@
 package view.textual;
 
-import model.Programa;
+import model.Gerenciador;
 import view.IFabricaVisual;
 import view.IMenuView;
 
 public class ViewTextualFactory implements IFabricaVisual {
 
     @Override
-    public IMenuView mostrarMenu(Programa programa) {
-        return new MenuTextualView(programa);
+    public IMenuView mostrarMenu(Gerenciador gerenciador) {
+        return new MenuTextualView(gerenciador);
     }
 }

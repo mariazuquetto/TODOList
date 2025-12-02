@@ -1,7 +1,7 @@
 package view;
-import model.Programa;
+import model.Gerenciador;
 
 public interface IFabricaVisual {
 
-    public IMenuView mostrarMenu(Programa programa);
+    public IMenuView mostrarMenu(Gerenciador gerenciador);
 }

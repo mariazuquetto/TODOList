@@ -1,24 +1,27 @@
 package model;
 import java.util.ArrayList;
+import java.util.List;
 
-public abstract class Lista {
+import static model.Utilidades.stringValida;
+
+public abstract class Lista<T extends Item> {
     private String nome;
-    private ArrayList<Item> lista;
+    private List<T> lista;
 
     public Lista(String nome) {
         setNome(nome);
-        setLista(new ArrayList<Item>());
+        setLista(new ArrayList<>());
     }
 
-    public void adicionarItem(Item item) {
+    public void adicionarItem(T item) {
         getLista().add(item);
     }
 
-    public void excluirItem(Item item) {
+    public void excluirItem(T item) {
         getLista().remove(item);
     }
 
-    public Item getItem(int id) { return lista.get(id+1); }
+    public T getItem(int id) { return lista.get(id-1); }
 
     public abstract String descrever();
 
@@ -26,15 +29,19 @@ public abstract class Lista {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome(String nome) throws IllegalArgumentException {
+        if (stringValida(nome)) {
+            this.nome = nome;
+        } else {
+            throw new IllegalArgumentException("Nome da lista inválido.");
+        }
     }
 
-    public ArrayList<Item> getLista() {
+    public List<T> getLista() {
         return lista;
     }
 
-    public void setLista(ArrayList<Item> lista) {
+    public void setLista(List<T> lista) {
         this.lista = lista;
     }
 }

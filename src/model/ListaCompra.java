@@ -1,6 +1,6 @@
 package model;
 
-public class ListaCompra extends Lista {
+public class ListaCompra extends Lista<ItemCompra> {
 
     public ListaCompra(String nome) {
         super(nome);
@@ -8,8 +8,7 @@ public class ListaCompra extends Lista {
 
     public double precoTotal() {
         double precoTotal = 0;
-        for (Item p : getLista()) {
-            ItemCompra item = (ItemCompra) p;
+        for (ItemCompra item : getLista()) {
             precoTotal += item.getPreco() * item.getQuantidade();
         }
         return precoTotal;
@@ -17,8 +16,7 @@ public class ListaCompra extends Lista {
 
     public int quantidadeTotal() {
         int quantidadeTotal = 0;
-        for (Item p : getLista()) {
-            ItemCompra item = (ItemCompra) p;
+        for (ItemCompra item : getLista()) {
             quantidadeTotal += item.getQuantidade();
         }
         return quantidadeTotal;

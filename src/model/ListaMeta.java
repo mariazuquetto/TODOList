@@ -1,10 +1,11 @@
 package model;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import static model.Utilidades.dataValida;
 
 public class ListaMeta extends Lista<ItemMeta> {
-    private LocalDate dataMeta;
+    private LocalDate dataMeta; ///MUDAR
 
     public ListaMeta(String nome) {
         super(nome);

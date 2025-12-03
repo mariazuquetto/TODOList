@@ -1,16 +1,17 @@
 package model;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static model.Utilidades.stringValida;
 
-public abstract class Lista<T extends Item> {
+public abstract class Lista<T extends Item> implements Serializable {
     private String nome;
     private List<T> lista;
 
     public Lista(String nome) {
         setNome(nome);
-        setLista(new ArrayList<>());
+        setLista(new ArrayList<T>());
     }
 
     public void adicionarItem(T item) {

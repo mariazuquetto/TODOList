@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 import static model.Utilidades.valorValido;
 
 public class ItemCompra extends Item {
@@ -15,7 +17,7 @@ public class ItemCompra extends Item {
     @Override
     public String descrever() {
         double total = preco * quantidade;
-        return String.format("%s %s(s) por %3s cada.\nTotal: %s %s",
+        return String.format("%s %s(s) por R$%.2f cada.     Total: R$%.2f %s",
                 getQuantidade(),
                 getTitulo(),
                 preco,

@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
+
 import static model.Utilidades.stringValida;
 
-public abstract class Item {
+public abstract class Item implements Serializable  {
     private String titulo;
     private Estado estado;
 

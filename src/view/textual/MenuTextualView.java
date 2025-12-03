@@ -3,26 +3,30 @@ package view.textual;
 import model.Gerenciador;
 import model.Lista;
 import model.ListaMeta;
+import view.FabricaVisualConcreta;
+import view.IFabricaVisual;
+import view.IListaView;
 import view.IMenuView;
 
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class MenuTextualView implements IMenuView {
+public class MenuTextualView <T extends Lista> implements IMenuView {
     private Gerenciador gerenciador;
     private Scanner scanner;
     private boolean menuAtivo;
     private boolean criarListaAtivo;
 
-    public MenuTextualView(Gerenciador gerenciador) {
-        this.gerenciador = gerenciador;
+    public MenuTextualView() {
+        gerenciador = Gerenciador.carregarEstado();
         scanner = new Scanner(System.in);
         menuAtivo = true;
     }
 
     @Override
     public void mostrar() {
-        System.out.println("Iniciando TODOList...");
+        System.out.println("\nIniciando TODOList...");
 
         while (menuAtivo) {
             mostrarComandos();
@@ -42,13 +46,14 @@ public class MenuTextualView implements IMenuView {
         System.out.println("2 - Criar nova lista");
         System.out.println("3 - Renomear lista");
         System.out.println("4 - Excluir lista");
-        System.out.println("0 - Sair do programa\n");
+        System.out.println("0 - Salvar e sair\n");
         System.out.print("Insira o valor comando: ");
     }
 
     public void lidarComando(String comando) {
         switch (comando) {
             case "1":
+                abrirLista();
                 break;
             case "2":
                 criarListaAtivo = true;
@@ -58,9 +63,16 @@ public class MenuTextualView implements IMenuView {
                 renomearLista();
                 break;
             case "4":
+                excluirLista();
                 break;
             case "0":
                 menuAtivo = false;
+                try {
+                    gerenciador.salvarEstado();
+                    System.out.println("\nSalvando...");}
+                catch (IOException e) {
+                    System.err.println("Erro ao salvar: " + e.getMessage());
+                }
                 break;
             default:
                 System.out.println("Comando desconhecido. Insira um número entre 0 e 4.");
@@ -77,7 +89,29 @@ public class MenuTextualView implements IMenuView {
                 System.out.println(id + ". " + lista.descrever());
             }
         }
+    }
 
+    public void abrirLista() {
+        System.out.print("Insira o ID da lista: ");
+        try {
+            int id = scanner.nextInt() - 1;
+            scanner.nextLine();
+
+            T lista = (T) gerenciador.getConjListas().get(id);
+
+            IFabricaVisual fabrica = FabricaVisualConcreta.getFabrica();
+            IListaView listaView = fabrica.mostrarLista(gerenciador, lista);
+
+            System.out.println("Entrando na lista '" + lista.getNome() + "'.");
+            listaView.mostrar();
+            System.out.println("Saindo da lista '" + lista.getNome() + "'.");
+
+        } catch (InputMismatchException e) {
+            scanner.nextLine();
+            System.out.println("Erro: ID inválido.");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Erro: ID inválido.");
+        }
     }
 
     public void criarLista() {
@@ -96,21 +130,25 @@ public class MenuTextualView implements IMenuView {
                         System.out.print("Insira o nome da sua lista: ");
                         String nome = scanner.nextLine().trim();
                         gerenciador.criarLista("ListaPadrao", nome);
+                        System.out.print("Lista criada com sucesso.\n");
                         break;
                     case "2":
                         System.out.print("Insira o nome da sua lista: ");
                         nome = scanner.nextLine().trim();
                         gerenciador.criarLista("ListaMeta", nome);
+                        System.out.print("Lista criada com sucesso.\n");
                         break;
                     case "3":
                         System.out.print("Insira o nome da sua lista: ");
                         nome = scanner.nextLine().trim();
                         gerenciador.criarLista("ListaCompra", nome);
+                        System.out.print("Lista criada com sucesso.\n");
                         break;
                     case "4":
                         System.out.print("Insira o nome da sua lista: ");
                         nome = scanner.nextLine().trim();
                         gerenciador.criarLista("ListaMidia", nome);
+                        System.out.print("Lista criada com sucesso.\n");
                         break;
                     case "0":
                         criarListaAtivo = false;
@@ -127,7 +165,7 @@ public class MenuTextualView implements IMenuView {
 
     public void renomearLista() {
             try {
-                System.out.print("Insira o id da lista a ser renomeada: ");
+                System.out.print("Insira o ID da lista a ser renomeada: ");
                 int id = scanner.nextInt();
                 scanner.nextLine();
 
@@ -144,6 +182,31 @@ public class MenuTextualView implements IMenuView {
                 System.out.println("Erro: ID não corresponde a nenhuma lista.");
             } catch (IllegalArgumentException e) {
                 System.out.println("Erro: " + e.getMessage());
+        }
+    }
+
+    public void excluirLista() {
+        try {
+            System.out.print("Insira o ID da lista a ser excluída: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Realmente quer excluir '" + gerenciador.getConjListas().get(id-1).getNome() +"'? (S/N) ");
+            String confirma = scanner.next().trim().toUpperCase();
+
+            if (confirma.equals("S")) {
+                gerenciador.excluirLista(id);
+                scanner.nextLine();
+                System.out.println("Lista excluída.");
+            } else {
+                scanner.nextLine();
+                System.out.println("Operação cancelada.");
+            }
+        } catch (InputMismatchException e) {
+            scanner.nextLine();
+            System.out.println("Erro: ID inválido.");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Erro: ID inválido.");
         }
     }
 }

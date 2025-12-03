@@ -1,6 +1,8 @@
 package model;
 
-public class ListaPadrao extends Lista<ItemPadrao>{
+import java.io.Serializable;
+
+public class ListaPadrao extends Lista<ItemPadrao> {
     public ListaPadrao(String nome) {
         super(nome);
     }

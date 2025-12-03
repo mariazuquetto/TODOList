@@ -1,10 +1,12 @@
 package model;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gerenciador {
+public class Gerenciador implements Serializable {
     private List<Lista> conjListas;
     private FabricaDeListas fabricaDeListas;
 
@@ -42,21 +44,16 @@ public class Gerenciador {
         return false;
     }
 
-    public boolean excluirLista(int id) {
-        try {
-            conjListas.remove(id - 1);
-            return true;
-        } catch (IndexOutOfBoundsException e) {
-            return false;
-        }
+    public void excluirLista(int id) throws IndexOutOfBoundsException {
+        conjListas.remove((id - 1));
     }
 
     public static ItemPadrao criarItemPadrao(String titulo) {
         return new ItemPadrao(titulo);
     }
 
-    public static ItemMeta criarItemMeta(String titulo) {
-        return new ItemMeta(titulo);
+    public static ItemMeta criarItemMeta(String titulo, LocalDate dataMeta) {
+        return new ItemMeta(titulo, dataMeta);
     }
 
     public static ItemCompra criarItemCompra(String titulo, int quantidade, double preco) {
@@ -71,5 +68,11 @@ public class Gerenciador {
         return conjListas;
     }
 
+    public static Gerenciador carregarEstado() {
+        return GerenciadorIO.desserializar();
+    }
 
+    public void salvarEstado() throws IOException {
+        GerenciadorIO.serializar(this);
+    }
 }

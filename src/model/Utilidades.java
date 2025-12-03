@@ -38,4 +38,8 @@ public class Utilidades {
     public static String formatarData(LocalDate data) {
         return data.format(formatadorData);
     }
+
+    public static LocalDate formatarData(String data) {
+        return LocalDate.parse(data, formatadorData);
+    }
 }

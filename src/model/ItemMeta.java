@@ -6,15 +6,15 @@ import static model.Utilidades.dataValida;
 public class ItemMeta extends Item {
     private LocalDate dataMeta;
 
-    public ItemMeta(String titulo) {
+    public ItemMeta(String titulo, LocalDate dataMeta) {
         super(titulo);
-        dataMeta = LocalDate.now();
+        this.dataMeta = dataMeta;
     }
 
     @Override
     public String descrever() {
         String dataFormatada = Utilidades.formatarData(dataMeta);
-        return String.format("%-25s até %s %10s",
+        return String.format("%-25s até %s %s",
                 getTitulo(),
                 dataFormatada,
                 getEstado().toString());

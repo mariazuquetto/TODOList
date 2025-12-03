@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 public class ListaCompra extends Lista<ItemCompra> {
 
     public ListaCompra(String nome) {

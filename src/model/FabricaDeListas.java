@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FabricaDeListas {
+public final class FabricaDeListas implements Serializable {
     private List<Lista> conjListas;
     private final int limiteListas = 10;
 

@@ -11,13 +11,14 @@ public class ItemMidia extends Item {
     public ItemMidia(String titulo, String formatoMidia) {
         super(titulo);
         setFormatoMidia(formatoMidia);
+        setNota(0);
     }
 
     @Override
     public String descrever() {
-        if (getEstado() == Estado.NOVO) {
-            return String.format("Mídia: %-25s | Formato: %-6s | Nota: - | Status: Pendente",
-                    getTitulo(), formatoMidia);
+        if (getEstado() == Estado.PENDENTE) {
+            return String.format("Mídia: %-25s | Formato: %-6s | Nota: %s/10 | Status: Pendente",
+                    getTitulo(), formatoMidia, nota);
         } else {
             return String.format("Mídia: %-25s | Formato: %-6s | Nota: %s/10 | Status: Visto/Lido",
                     getTitulo(), formatoMidia, nota);
@@ -41,7 +42,7 @@ public class ItemMidia extends Item {
     }
 
     public void setNota(double nota) throws IllegalArgumentException {
-        if (valorValido(nota) && nota <= 10) {
+        if (nota >= 0 && nota <= 10) {
             this.nota = nota;
         } else {
             throw new IllegalArgumentException("Nota inválida. Insira uma nota entre 0 e 10.");

@@ -10,7 +10,7 @@ public abstract class Item implements Serializable  {
 
     public Item(String titulo) {
         setTitulo(titulo);
-        estado = Estado.NOVO;
+        estado = Estado.PENDENTE;
     }
 
     public String getTitulo() {
@@ -34,14 +34,4 @@ public abstract class Item implements Serializable  {
     }
 
     public abstract String descrever();
-}
-
-enum Estado {
-    NOVO,
-    FEITO;
-
-    @Override
-    public String toString() {
-        return "[" + this.name() + "]";
-    }
 }

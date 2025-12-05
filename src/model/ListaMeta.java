@@ -5,11 +5,9 @@ import java.time.LocalDate;
 import static model.Utilidades.dataValida;
 
 public class ListaMeta extends Lista<ItemMeta> {
-    private LocalDate dataMeta; ///MUDAR
 
     public ListaMeta(String nome) {
         super(nome);
-        dataMeta = LocalDate.now();
     }
 
     @Override
@@ -18,15 +16,5 @@ public class ListaMeta extends Lista<ItemMeta> {
                 getNome());
     }
 
-    public LocalDate getDataMeta() {
-        return dataMeta;
-    }
 
-    public void setDataMeta(LocalDate dataMeta) throws IllegalArgumentException {
-        if (dataValida(dataMeta)) {
-            this.dataMeta = dataMeta;
-        } else {
-            throw new IllegalArgumentException("Data inválida. Insira uma data no futuro.");
-        }
-    }
 }

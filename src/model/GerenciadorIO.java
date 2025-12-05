@@ -19,11 +19,25 @@ public class GerenciadorIO {
         Gerenciador gerenciador = new Gerenciador();
         try (FileInputStream fileIn = new FileInputStream(ARQUIVO_DADOS);
              ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
-             gerenciador = (Gerenciador) objectIn.readObject();
+            gerenciador = (Gerenciador) objectIn.readObject();
         } catch (FileNotFoundException e) {
             gerenciador = new Gerenciador();
         } catch (IOException | ClassNotFoundException e) {
         }
         return gerenciador;
+    }
+
+    public static Gerenciador carregarArquivo(String caminho) throws IOException, ClassNotFoundException {
+        try (FileInputStream fileIn = new FileInputStream(caminho);
+             ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
+
+            Object obj = objectIn.readObject();
+            if (obj instanceof Gerenciador) {
+                return (Gerenciador) obj;
+            } else {
+                throw new IOException("Arquivo incompatível: não contém um Gerenciador válido.");
+            }
         }
+    }
+
 }

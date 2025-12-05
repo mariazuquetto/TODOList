@@ -1,15 +1,16 @@
 package view;
 
+import view.grafica.ViewGraficaFactory;
 import view.textual.ViewTextualFactory;
 
 public class FabricaVisualConcreta {
-    private static IFabricaVisual fabrica = new ViewTextualFactory();
+    private static IFabricaVisual fabrica = new ViewGraficaFactory();
 
-    public static void configurarInterface(TipoInterface tipo) throws IllegalArgumentException {
-        if (tipo == TipoInterface.GRAFICA) {
+    public static void configurarInterface(String tipo) throws IllegalArgumentException {
+        if (TipoInterface.GRAFICA.name().equalsIgnoreCase(tipo)) {
+            fabrica = new ViewGraficaFactory();
+        } else if (TipoInterface.TEXTUAL.name().equalsIgnoreCase(tipo)) {
             fabrica = new ViewTextualFactory();
-        } else if (tipo == TipoInterface.TEXTUAL) {
-            /// completar
         } else {
             throw new IllegalArgumentException("Tipo de interface inválida.");
         }

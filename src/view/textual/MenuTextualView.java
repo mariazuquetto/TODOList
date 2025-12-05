@@ -1,6 +1,7 @@
 package view.textual;
 
 import model.Gerenciador;
+import model.GerenciadorIO;
 import model.Lista;
 import model.ListaMeta;
 import view.FabricaVisualConcreta;
@@ -8,6 +9,7 @@ import view.IFabricaVisual;
 import view.IListaView;
 import view.IMenuView;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -46,6 +48,7 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         System.out.println("2 - Criar nova lista");
         System.out.println("3 - Renomear lista");
         System.out.println("4 - Excluir lista");
+        System.out.println("5 - Carregar arquivo");
         System.out.println("0 - Salvar e sair\n");
         System.out.print("Insira o valor comando: ");
     }
@@ -64,6 +67,13 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
                 break;
             case "4":
                 excluirLista();
+                break;
+            case "5":
+                try {
+                    carregarArquivoTexto(scanner);
+                } catch (Exception e) {
+                    System.out.println("Erro ao carregar arquivo.");
+                }
                 break;
             case "0":
                 menuAtivo = false;
@@ -207,6 +217,25 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
             System.out.println("Erro: ID inválido.");
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Erro: ID inválido.");
+        }
+    }
+
+    private void carregarArquivoTexto(Scanner sc) {
+        System.out.print("Digite o caminho do arquivo (.ser): ");
+        String caminho = sc.nextLine().trim();
+
+        if (caminho.startsWith("\"") && caminho.endsWith("\"")) {
+            caminho = caminho.substring(1, caminho.length() - 1);
+        }
+
+        try {
+            Gerenciador novo = GerenciadorIO.carregarArquivo(caminho); // este método agora lança exceções quando incompatível
+            this.gerenciador = novo;
+            System.out.println("Arquivo carregado com sucesso!");
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado. Verifique o caminho informado.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Erro ao carregar arquivo: " + e.getMessage());
         }
     }
 }

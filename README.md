@@ -77,5 +77,4 @@ A classe `FabricaDeListas` encapsula a lógica de criação das listas. Ela é r
     * Mude a string para:
         * `"Grafica"` (para interface Swing).
         * `"Textual"` (para interface de console).
-4.  **Execute o projeto:**
-    * Clique com o botão direito no `Main.java` e selecione **Run 'Main.main()'**.
+3.  Execute o projeto.

@@ -128,7 +128,7 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         while (criarListaAtivo) {
             System.out.println("\n-------- TIPOS DE LISTA --------");
             System.out.println("1 - Lista Padrão");
-            System.out.println("2 - Lista com Prazo");
+            System.out.println("2 - Lista de Tarefas");
             System.out.println("3 - Lista de Compras");
             System.out.println("4 - Lista de Mídias");
             System.out.println("0 - Voltar ao Menu");

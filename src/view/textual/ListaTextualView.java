@@ -242,7 +242,7 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
 
                     } else if (tipo.equals("ListaMidia")) {
                         System.out.print("Insira a nota: ");
-                        double nota = scanner.nextInt();
+                        double nota = scanner.nextDouble();
                         scanner.nextLine();
 
                         ItemMidia itemMidia = (ItemMidia) item;

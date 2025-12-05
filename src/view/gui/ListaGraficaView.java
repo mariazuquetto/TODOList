@@ -1,4 +1,4 @@
-package view.grafica;
+package view.gui;
 
 import model.*;
 import view.IListaView;
@@ -7,6 +7,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 
+/**
+ * Classe responsável pela interface gráfica de visualização e manipulação de uma lista específica.
+ * <p>
+ * Esta classe estende {@link JFrame} para apresentar uma janela onde os itens de uma lista
+ * são exibidos. Permite operações como adicionar novos itens, editar detalhes, remover itens
+ * e visualizar informações agregadas (como totais de preços ou progresso).
+ * Adapta a interface dinamicamente dependendo do tipo de lista (Tarefas, Compras, Mídia, Padrão).
+ * </p>
+ *
+ * @param <S> O tipo de item contido na lista (subclasse de {@link Item}).
+ * @param <T> O tipo da lista (subclasse de {@link Lista}).
+ */
 public class ListaGraficaView<S extends Item, T extends Lista<S>> extends JFrame implements IListaView {
     private Gerenciador gerenciador;
     private T lista;
@@ -16,6 +28,17 @@ public class ListaGraficaView<S extends Item, T extends Lista<S>> extends JFrame
     private JLabel lblNomeLista, lblTipoLista;
     private JLabel lblInfoExtra;
 
+    /**
+     * Construtor da janela de visualização da lista.
+     * <p>
+     * Configura o layout, inicializa os componentes gráficos (botões, listas, etiquetas)
+     * e define os renderizadores de células para exibir os itens corretamente conforme o seu tipo
+     * (exibindo preços para compras, notas para mídias, datas para metas).
+     * </p>
+     *
+     * @param gerenciador A instância do gerenciador para operações de persistência e criação de itens.
+     * @param lista A lista específica a ser visualizada e editada.
+     */
     @SuppressWarnings("unchecked")
     public ListaGraficaView(Gerenciador gerenciador, Lista<?> lista) {
         this.gerenciador = gerenciador;
@@ -135,11 +158,21 @@ public class ListaGraficaView<S extends Item, T extends Lista<S>> extends JFrame
     }
 
 
+    /**
+     * Torna a janela da lista visível ao utilizador.
+     */
     @Override
     public void mostrar() {
         setVisible(true);
     }
 
+    /**
+     * Atualiza as informações de rodapé específicas para certos tipos de lista.
+     * <p>
+     * Por exemplo, para listas de compras exibe a quantidade e o preço total;
+     * para listas de mídia mostra o progresso (número de mídias avaliadas vs total).
+     * </p>
+     */
     private void acaoDeLista() {
         if (lista instanceof ListaCompra) {
             ListaCompra lc = (ListaCompra) lista;
@@ -154,6 +187,13 @@ public class ListaGraficaView<S extends Item, T extends Lista<S>> extends JFrame
         }
     }
 
+    /**
+     * Recarrega a lista visual de itens a partir dos dados do modelo e atualiza a interface.
+     * <p>
+     * Limpa a seleção atual, desabilita os botões de edição/remoção e atualiza
+     * as informações de rodapé chamando {@link #acaoDeLista()}.
+     * </p>
+     */
     private void atualizarItens() {
         modelItens.clear();
         for (S i : lista.getLista()) {
@@ -167,7 +207,14 @@ public class ListaGraficaView<S extends Item, T extends Lista<S>> extends JFrame
         acaoDeLista();
     }
 
-    // ----------- NOVOITEM() AJUSTADO PARA CADA TIPO ---------------
+    /**
+     * Inicia o processo de criação de um novo item na lista.
+     * <p>
+     * Exibe caixas de diálogo ({@link JOptionPane}) solicitando os dados necessários.
+     * O fluxo de perguntas adapta-se ao tipo da lista (ex: pede data para metas,
+     * preço para compras, formato para mídias).
+     * </p>
+     */
     private void novoItem() {
         String tipoLista = lista.getClass().getSimpleName();
 
@@ -256,8 +303,16 @@ public class ListaGraficaView<S extends Item, T extends Lista<S>> extends JFrame
             JOptionPane.showMessageDialog(this, "Erro: Entrada inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    // -------------------------------------------------------------
 
+    /**
+     * Inicia o fluxo de edição de um item existente selecionado.
+     * <p>
+     * Apresenta um menu de opções para escolher qual atributo editar (Título, Estado,
+     * e atributos específicos como Prazo, Quantidade, Nota, dependendo do tipo).
+     * </p>
+     *
+     * @param indice O índice do item selecionado na lista.
+     */
     private void editarItem(int indice) {
         if (indice >= 0 && indice < modelItens.size()) {
             S item = modelItens.get(indice);
@@ -390,7 +445,14 @@ public class ListaGraficaView<S extends Item, T extends Lista<S>> extends JFrame
     }
 
 
-
+    /**
+     * Remove o item atualmente selecionado na lista, após confirmação do utilizador.
+     * <p>
+     * Se confirmado, o item é removido da lista e o estado do gerenciador é salvo.
+     * </p>
+     *
+     * @param indice O índice do item a ser removido.
+     */
     private void removerItem(int indice) {
         if (indice >= 0 && indice < modelItens.size()) {
             int resposta = JOptionPane.showConfirmDialog(
@@ -411,12 +473,21 @@ public class ListaGraficaView<S extends Item, T extends Lista<S>> extends JFrame
         }
     }
 
+    /**
+     * Fecha a visualização da lista atual e retorna ao Menu Principal.
+     */
     private void voltarMenu() {
         MenuGraficoView menu = new MenuGraficoView();
         menu.mostrar();
         this.dispose();
     }
 
+    /**
+     * Converte o nome da classe da lista numa designação amigável para exibição na interface.
+     *
+     * @param lista A lista a ser identificada.
+     * @return Uma string legível (ex: "Compras" em vez de "ListaCompra").
+     */
     private String tipoAmigavel(Lista lista) {
         switch (lista.getClass().getSimpleName()) {
             case "ListaPadrao":

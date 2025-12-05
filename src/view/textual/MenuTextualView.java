@@ -14,18 +14,42 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Interface textual principal da aplicação (Menu Principal via Consola).
+ * <p>
+ * Implementa a interface {@link IMenuView} para fornecer interação baseada em texto.
+ * Exibe o menu principal no terminal, permitindo ao utilizador navegar entre as opções
+ * de gestão de listas (criar, abrir, renomear, excluir, carregar) e persistência de dados.
+ * </p>
+ *
+ * @param <T> O tipo de lista genérica manipulada pelo menu (subclasse de {@link Lista}).
+ */
 public class MenuTextualView <T extends Lista> implements IMenuView {
     private Gerenciador gerenciador;
     private Scanner scanner;
     private boolean menuAtivo;
     private boolean criarListaAtivo;
 
+    /**
+     * Construtor do menu textual.
+     * <p>
+     * Inicializa o menu carregando o estado anterior do gerenciador (se existir),
+     * configura o scanner para leitura de entrada e define o menu como ativo.
+     * </p>
+     */
     public MenuTextualView() {
         gerenciador = Gerenciador.carregarEstado();
         scanner = new Scanner(System.in);
         menuAtivo = true;
     }
 
+    /**
+     * Inicia o ciclo de vida do menu principal.
+     * <p>
+     * Mantém o programa em execução, exibindo repetidamente as opções e processando
+     * os comandos do utilizador até que a opção de sair seja selecionada.
+     * </p>
+     */
     @Override
     public void mostrar() {
         System.out.println("\nIniciando TODOList...");
@@ -39,6 +63,13 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         System.out.println("Fechando TODOList...");
     }
 
+    /**
+     * Exibe as opções disponíveis no menu principal.
+     * <p>
+     * Lista as listas atualmente criadas no sistema e apresenta o menu numérico
+     * com as ações possíveis (abrir, criar, renomear, excluir, carregar, sair).
+     * </p>
+     */
     public void mostrarComandos() {
         System.out.println("\n-------- MENU PRINCIPAL --------");
         System.out.println("Listas atuais:");
@@ -53,6 +84,11 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         System.out.print("Insira o valor comando: ");
     }
 
+    /**
+     * Processa a entrada do utilizador e direciona para o método correspondente.
+     *
+     * @param comando A string contendo a opção numérica escolhida pelo utilizador.
+     */
     public void lidarComando(String comando) {
         switch (comando) {
             case "1":
@@ -89,6 +125,12 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         }
     }
 
+    /**
+     * Lista todas as listas registadas no gerenciador.
+     * <p>
+     * Exibe o ID e a descrição de cada lista. Caso não existam listas, exibe uma mensagem informativa.
+     * </p>
+     */
     public void mostrarListas() {
         if (gerenciador.getConjListas().size() == 0) {
             System.out.println("Nenhuma lista no momento.");
@@ -101,6 +143,13 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         }
     }
 
+    /**
+     * Inicia o fluxo para abrir e visualizar uma lista específica.
+     * <p>
+     * Solicita o ID da lista, recupera a lista correspondente e delega a exibição
+     * para uma {@link IListaView} criada pela fábrica visual.
+     * </p>
+     */
     public void abrirLista() {
         System.out.print("Insira o ID da lista: ");
         try {
@@ -124,6 +173,13 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         }
     }
 
+    /**
+     * Inicia o fluxo de criação de uma nova lista.
+     * <p>
+     * Apresenta um submenu para escolha do tipo de lista (Padrão, Tarefas, Compras, Mídias)
+     * e solicita o nome da nova lista.
+     * </p>
+     */
     public void criarLista() {
         while (criarListaAtivo) {
             System.out.println("\n-------- TIPOS DE LISTA --------");
@@ -173,28 +229,40 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         }
     }
 
+    /**
+     * Permite renomear uma lista existente.
+     * <p>
+     * Solicita o ID da lista e o novo nome desejado.
+     * </p>
+     */
     public void renomearLista() {
-            try {
-                System.out.print("Insira o ID da lista a ser renomeada: ");
-                int id = scanner.nextInt();
-                scanner.nextLine();
+        try {
+            System.out.print("Insira o ID da lista a ser renomeada: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
 
-                System.out.print("Insira o novo nome da lista: ");
-                String novoNome = scanner.nextLine().trim();
+            System.out.print("Insira o novo nome da lista: ");
+            String novoNome = scanner.nextLine().trim();
 
-                gerenciador.atualizarLista(id, novoNome);
-                criarListaAtivo = false;
+            gerenciador.atualizarLista(id, novoNome);
+            criarListaAtivo = false;
 
-            } catch (InputMismatchException e){
-                scanner.nextLine();
-                System.out.println("Erro: ID não corresponde a nenhuma lista.");
-            } catch (IndexOutOfBoundsException e){
-                System.out.println("Erro: ID não corresponde a nenhuma lista.");
-            } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
+        } catch (InputMismatchException e){
+            scanner.nextLine();
+            System.out.println("Erro: ID não corresponde a nenhuma lista.");
+        } catch (IndexOutOfBoundsException e){
+            System.out.println("Erro: ID não corresponde a nenhuma lista.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 
+    /**
+     * Remove uma lista do sistema.
+     * <p>
+     * Solicita o ID da lista e pede confirmação explícita (S/N) antes de excluir.
+     * </p>
+     */
     public void excluirLista() {
         try {
             System.out.print("Insira o ID da lista a ser excluída: ");
@@ -220,6 +288,15 @@ public class MenuTextualView <T extends Lista> implements IMenuView {
         }
     }
 
+    /**
+     * Carrega os dados da aplicação a partir de um ficheiro externo.
+     * <p>
+     * Solicita o caminho do ficheiro ao utilizador e tenta carregar o estado do gerenciador.
+     * Remove aspas do caminho caso sejam inseridas pelo utilizador (comum ao copiar caminhos).
+     * </p>
+     *
+     * @param sc O scanner para leitura do caminho do ficheiro.
+     */
     private void carregarArquivoTexto(Scanner sc) {
         System.out.print("Digite o caminho do arquivo (.ser): ");
         String caminho = sc.nextLine().trim();

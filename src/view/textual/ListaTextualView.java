@@ -11,6 +11,18 @@ import java.util.Scanner;
 
 import static model.Utilidades.*;
 
+/**
+ * Implementação da interface de visualização de lista para o modo textual (consola).
+ * <p>
+ * Esta classe gere a interação do utilizador com uma lista específica através de menus de texto.
+ * Permite listar itens, criar novos, editar existentes e remover itens, adaptando as
+ * solicitações de dados (como datas, preços ou formatos) ao tipo específico de lista
+ * que está a ser manipulada (Tarefas, Compras, Média, etc.).
+ * </p>
+ *
+ * @param <S> O tipo de item contido na lista (subclasse de {@link Item}).
+ * @param <T> O tipo da lista (subclasse de {@link Lista}).
+ */
 public class ListaTextualView <S extends Item, T extends Lista<S>> implements IListaView {
 
     private Gerenciador gerenciador;
@@ -18,6 +30,15 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
     private Scanner scanner;
     private boolean listaAtiva;
 
+    /**
+     * Construtor da vista textual de lista.
+     * <p>
+     * Inicializa o scanner para leitura da entrada padrão e define o estado da lista como ativa.
+     * </p>
+     *
+     * @param gerenciador O gerenciador do sistema, usado para criar instâncias de itens.
+     * @param lista A lista específica com a qual o utilizador irá interagir.
+     */
     public ListaTextualView(Gerenciador gerenciador, T lista) {
         this.gerenciador = gerenciador;
         this.lista = lista;
@@ -25,6 +46,13 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         listaAtiva = true;
     }
 
+    /**
+     * Inicia o ciclo principal de interação com a lista.
+     * <p>
+     * Mantém o menu ativo, exibindo comandos e processando a entrada do utilizador
+     * até que a opção de sair (0) seja selecionada.
+     * </p>
+     */
     @Override
     public void mostrar() {
         while (listaAtiva) {
@@ -34,6 +62,13 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         }
     }
 
+    /**
+     * Exibe o menu de comandos disponíveis para a lista atual.
+     * <p>
+     * Mostra o cabeçalho com o nome da lista, os itens atuais, informações de rodapé
+     * específicas (como totais de preços) e as opções numéricas de ação.
+     * </p>
+     */
     public void mostrarComandos() {
         System.out.println("\n-------- "+ lista.descrever() +" --------");
         System.out.println("Itens atuais:");
@@ -47,6 +82,11 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         System.out.print("Insira o valor comando: ");
     }
 
+    /**
+     * Processa o comando numérico inserido pelo utilizador.
+     *
+     * @param comando A string contendo a opção escolhida ("1", "2", "3" ou "0").
+     */
     public void lidarComando(String comando) {
         switch (comando) {
             case "1":
@@ -66,6 +106,13 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         }
     }
 
+    /**
+     * Lista todos os itens presentes na lista atual.
+     * <p>
+     * Exibe o ID (índice base-1) e a descrição de cada item. Caso a lista esteja vazia,
+     * informa o utilizador.
+     * </p>
+     */
     public void mostrarItens() {
         if (lista.getLista().size() == 0) {
             System.out.println("Nenhum item no momento.");
@@ -78,6 +125,13 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         }
     }
 
+    /**
+     * Exibe informações adicionais dependendo do tipo da lista.
+     * <p>
+     * Para {@link ListaCompra}, mostra a quantidade total de itens e o preço total acumulado.
+     * Para {@link ListaMidia}, mostra o número de mídias concluídas e o total adicionado.
+     * </p>
+     */
     public void acaoDeLista() {
         if (lista instanceof ListaCompra) {
             System.out.println(String.format("Quantidade total: %-15d Preço total: R$%.2f",
@@ -88,6 +142,14 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         }
     }
 
+    /**
+     * Inicia o fluxo de criação de um novo item.
+     * <p>
+     * Solicita o título e, dependendo do tipo da lista (Padrão, Meta, Compra, Mídia),
+     * pede informações adicionais como data, preço, quantidade ou formato.
+     * Trata exceções de formato e validação de dados.
+     * </p>
+     */
     public void criarItem() {
         try {
             System.out.print("Insira o título do seu item: ");
@@ -150,6 +212,13 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         }
     }
 
+    /**
+     * Inicia o fluxo de edição de um item existente.
+     * <p>
+     * Solicita o ID do item e apresenta um submenu com as propriedades editáveis
+     * (Título, Estado, e campos específicos como Prazo, Quantidade, Nota).
+     * </p>
+     */
     public void editarItem() {
         try {
             System.out.print("Insira o ID do item a editar: ");
@@ -266,12 +335,23 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         }
     }
 
+    /**
+     * Método auxiliar para solicitar e ler uma data do utilizador.
+     *
+     * @return A string da data inserida.
+     */
     public String lidarData() {
         System.out.print("Insira o prazo do seu item (formato dd/mm/aaaa): ");
         String data = scanner.nextLine().trim();
         return data;
     }
 
+    /**
+     * Método auxiliar para solicitar e ler uma quantidade inteira.
+     *
+     * @return O valor inteiro da quantidade.
+     * @throws IllegalArgumentException (Implicitamente via InputMismatchException do scanner) se a entrada não for um número.
+     */
     public int lidarQuantidade() throws IllegalArgumentException {
         System.out.print("Insira a quantidade: ");
         int quantidade = scanner.nextInt();
@@ -279,6 +359,12 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         return quantidade;
     }
 
+    /**
+     * Método auxiliar para solicitar e ler um preço (double).
+     *
+     * @return O valor do preço.
+     * @throws IllegalArgumentException (Implicitamente via InputMismatchException do scanner) se a entrada não for um número.
+     */
     public double lidarPreco() throws IllegalArgumentException {
         System.out.print("Insira o preço: ");
         double preco = scanner.nextDouble();
@@ -286,12 +372,24 @@ public class ListaTextualView <S extends Item, T extends Lista<S>> implements IL
         return preco;
     }
 
+    /**
+     * Método auxiliar para solicitar e ler o formato de mídia.
+     *
+     * @return A string do formato.
+     */
     public String lidarFormato() {
         System.out.print("Insira o formato de mídia: ");
         String formato = scanner.nextLine().trim();
         return formato;
     }
 
+    /**
+     * Remove um item da lista após confirmação.
+     * <p>
+     * Solicita o ID do item a remover e pede confirmação (S/N).
+     * Se confirmado, remove o item da coleção.
+     * </p>
+     */
     public void excluirItem() {
         try {
             System.out.print("Insira o ID do item a ser excluído: ");

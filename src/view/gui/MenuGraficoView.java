@@ -1,4 +1,4 @@
-package view.grafica;
+package view.gui;
 
 import model.Gerenciador;
 import model.Lista;
@@ -10,6 +10,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
+/**
+ * Interface gráfica principal da aplicação (Menu Principal).
+ * <p>
+ * Esta classe estende {@link JFrame} e apresenta o ponto de entrada visual do sistema.
+ * Exibe a lista de todas as listas de tarefas criadas e fornece botões para as operações
+ * de gestão global: criar nova lista, abrir, renomear, excluir, salvar e carregar ficheiros.
+ * </p>
+ */
 public class MenuGraficoView extends JFrame implements IMenuView {
     private Gerenciador gerenciador;
     private JList<String> listaListas;
@@ -19,6 +27,14 @@ public class MenuGraficoView extends JFrame implements IMenuView {
     private JPanel painelTopo;
     private int listaSelecionada = -1;
 
+    /**
+     * Construtor do Menu Principal Gráfico.
+     * <p>
+     * Inicializa a janela, carrega o estado do {@link Gerenciador}, configura o layout,
+     * cria os componentes visuais (lista, botões, títulos) e define os ouvintes de eventos (listeners)
+     * para interagir com o utilizador.
+     * </p>
+     */
     public MenuGraficoView() {
         super("TODOList");
         this.gerenciador = Gerenciador.carregarEstado();
@@ -153,15 +169,30 @@ public class MenuGraficoView extends JFrame implements IMenuView {
         setVisible(true);
     }
 
+    /**
+     * Torna a janela do menu visível ao utilizador.
+     */
     @Override
     public void mostrar() {
         setVisible(true);
     }
 
+    /**
+     * Verifica se existe uma lista válida selecionada na interface.
+     *
+     * @return {@code true} se o índice selecionado for válido dentro do modelo; {@code false} caso contrário.
+     */
     private boolean getListaSelecionadaOK() {
         return (listaListas.getSelectedIndex() >= 0 && listaListas.getSelectedIndex() < listaModel.size());
     }
 
+    /**
+     * Atualiza o componente visual (JList) com os dados atuais do {@link Gerenciador}.
+     * <p>
+     * Limpa o modelo visual e preenche-o novamente com os nomes formatados das listas.
+     * Também reseta o estado dos botões que dependem de seleção (Abrir, Renomear, Excluir).
+     * </p>
+     */
     private void atualizarListas() {
         listaModel.clear();
         java.util.List<Lista> listas = gerenciador.getConjListas();
@@ -180,7 +211,15 @@ public class MenuGraficoView extends JFrame implements IMenuView {
         btnExcluir.setEnabled(false);
     }
 
-    // Método para formatar nome + tipo da lista no padrão amigável
+    /**
+     * Formata o nome da lista para exibição, incluindo o seu tipo de forma legível.
+     * <p>
+     * Converte o nome da classe interna (ex: "ListaMeta") para uma string amigável (ex: "Lista de Tarefas").
+     * </p>
+     *
+     * @param lista A lista a ser formatada.
+     * @return Uma string contendo o tipo amigável e o nome da lista (ex: "Lista de Tarefas: Trabalho").
+     */
     private String formatarNomeLista(Lista lista) {
         String tipo;
         switch (lista.getClass().getSimpleName()) {
@@ -202,6 +241,13 @@ public class MenuGraficoView extends JFrame implements IMenuView {
         return tipo + ": " + lista.getNome();
     }
 
+    /**
+     * Inicia o fluxo de criação de uma nova lista.
+     * <p>
+     * Exibe diálogos para o utilizador escolher o tipo de lista e inserir o nome.
+     * Cria a lista no gerenciador e salva o estado automaticamente.
+     * </p>
+     */
     private void criarNovaLista() {
         String[] tipos = {"Padrão", "Tarefas", "Compras", "Mídia"};
         String tipoSelecionado = (String) JOptionPane.showInputDialog(
@@ -221,7 +267,7 @@ public class MenuGraficoView extends JFrame implements IMenuView {
                     case "Padrão":
                         tipoInterno = "ListaPadrao";
                         break;
-                    case "Meta":
+                    case "Tarefas":
                         tipoInterno = "ListaMeta";
                         break;
                     case "Compras":
@@ -248,6 +294,14 @@ public class MenuGraficoView extends JFrame implements IMenuView {
         }
     }
 
+    /**
+     * Abre a visualização detalhada da lista selecionada.
+     * <p>
+     * Instancia uma {@link ListaGraficaView} para a lista escolhida e fecha o menu principal.
+     * </p>
+     *
+     * @param indice O índice da lista selecionada.
+     */
     private void abrirLista(int indice) {
         java.util.List<Lista> listas = gerenciador.getConjListas();
         if (indice >= 0 && indice < listas.size()) {
@@ -258,6 +312,11 @@ public class MenuGraficoView extends JFrame implements IMenuView {
         }
     }
 
+    /**
+     * Exclui a lista selecionada após confirmação do utilizador.
+     *
+     * @param indice O índice da lista a ser excluída.
+     */
     private void excluirLista(int indice) {
         java.util.List<Lista> listas = gerenciador.getConjListas();
         if (indice >= 0 && indice < listas.size()) {
@@ -279,6 +338,14 @@ public class MenuGraficoView extends JFrame implements IMenuView {
         }
     }
 
+    /**
+     * Permite renomear a lista selecionada.
+     * <p>
+     * Solicita o novo nome através de um diálogo e atualiza o gerenciador.
+     * </p>
+     *
+     * @param indice O índice da lista a ser renomeada.
+     */
     private void renomearLista(int indice) {
         java.util.List<Lista> listas = gerenciador.getConjListas();
         if (indice >= 0 && indice < listas.size()) {
@@ -297,6 +364,11 @@ public class MenuGraficoView extends JFrame implements IMenuView {
         }
     }
 
+    /**
+     * Salva o estado atual do sistema e encerra a aplicação.
+     *
+     * @throws IOException Se ocorrer um erro durante o processo de gravação do ficheiro.
+     */
     private void salvarESair() throws IOException {
         gerenciador.salvarEstado();
         System.exit(0);

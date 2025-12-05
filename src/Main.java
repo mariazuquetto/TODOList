@@ -8,7 +8,7 @@ public class Main {
     public static void main(String args[]) {
         Gerenciador programa = GerenciadorIO.desserializar();
 
-        FabricaVisualConcreta.configurarInterface("GRAFICA"); // "GRAFICA" ou "TEXTUAL"
+        FabricaVisualConcreta.configurarInterface("Grafica"); // "GRAFICA" ou "TEXTUAL"
         IFabricaVisual fabrica = FabricaVisualConcreta.getFabrica();
 
         IMenuView menu = fabrica.mostrarMenu(programa);

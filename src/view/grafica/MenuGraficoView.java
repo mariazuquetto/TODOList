@@ -203,7 +203,7 @@ public class MenuGraficoView extends JFrame implements IMenuView {
     }
 
     private void criarNovaLista() {
-        String[] tipos = {"Padrão", "Meta", "Compras", "Mídia"};
+        String[] tipos = {"Padrão", "Tarefas", "Compras", "Mídia"};
         String tipoSelecionado = (String) JOptionPane.showInputDialog(
                 this,
                 "Escolha o tipo de lista:",

@@ -17,10 +17,10 @@ public class ItemMidia extends Item {
     @Override
     public String descrever() {
         if (getEstado() == Estado.PENDENTE) {
-            return String.format("Mídia: %-25s | Formato: %-6s | Nota: %s/10 | Status: Pendente",
+            return String.format("Mídia: %s | Formato: %s | Nota: %s/10 | Status: Pendente",
                     getTitulo(), formatoMidia, nota);
         } else {
-            return String.format("Mídia: %-25s | Formato: %-6s | Nota: %s/10 | Status: Visto/Lido",
+            return String.format("Mídia: %s | Formato: %s | Nota: %s/10 | Status: Visto/Lido",
                     getTitulo(), formatoMidia, nota);
         }
     }
